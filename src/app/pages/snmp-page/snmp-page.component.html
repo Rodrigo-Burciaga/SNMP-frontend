@@ -1,3 +1,35 @@
-<p>
-  snmp-page works!
-</p>
+<div class="row">
+  <div class="col-md-12">
+    <nb-card class="inline-form-card">
+      <nb-card-header>Agregar Agente</nb-card-header>
+      <nb-card-body>
+        <form class="form-inline" (ngSubmit)="createAgent()">
+          <input type="text" nbInput fullWidth placeholder="Nombre" [(ngModel)]="agente.name" [ngModelOptions]="{standalone: true}">
+          <input type="text" nbInput fullWidth placeholder="IP" [(ngModel)]="agente.ip" [ngModelOptions]="{standalone: true}">
+          <input type="text" nbInput fullWidth placeholder="Port" [(ngModel)]="agente.port" [ngModelOptions]="{standalone: true}">
+          <button type="submit" nbButton status="primary" *ngIf="isNew" (click)='createAgent'>Agregar</button>
+          <button type="submit" nbButton status="primary" *ngIf="!isNew" (click)='updateAgent'>Actualizar</button>
+        </form>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>
+
+<div *ngIf="!isNew">
+
+  <ngx-system></ngx-system>
+
+  <ngx-memory></ngx-memory>
+
+  <div class="row">
+    <div class="col-8">
+      <ngx-cpu></ngx-cpu>
+
+      <ngx-load></ngx-load>
+    </div>
+
+    <div class="col-4">
+      <ngx-disk></ngx-disk>
+    </div>
+  </div>
+</div>

@@ -16,6 +16,10 @@ const routes: Routes = [
         component: ECommerceComponent,
       },
       {
+        path: 'snmp/:id',
+        component: SnmpPageComponent,
+      },
+      {
         path: 'snmp',
         component: SnmpPageComponent,
       },

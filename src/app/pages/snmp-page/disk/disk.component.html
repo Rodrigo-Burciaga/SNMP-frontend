@@ -1,0 +1,12 @@
+<nb-card size="tiny" class="solar-card">
+  <nb-card-header>Disco duro</nb-card-header>
+  <nb-card-body>
+    <div echarts [options]="option" class="echart"></div>
+    <div class="info">
+      <div class="h4 value">{{diskModel.disk_used}}</div>
+      <div class="details subtitle-2">
+        <span>de</span>
+        {{diskModel.disk_total}}</div>
+    </div>
+  </nb-card-body>
+</nb-card>

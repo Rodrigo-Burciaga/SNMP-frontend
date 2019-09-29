@@ -1,0 +1,32 @@
+<nb-card>
+
+  <nb-card-header>
+    <span>CPU</span>
+    <button nbButton (click)="actualizar()">Actualizar</button>
+  </nb-card-header>
+
+  <div class="summary-container">
+    <div>
+      <div>ssCpuRawUser</div>
+      <div class="h6">{{cpuModel.ssCpu_raw_user}}</div>
+    </div>
+
+    <div>
+      <div>ssCpuRawidle</div>
+      <div class="h6">{{cpuModel.ssCpu_raw_idle}}</div>
+    </div>
+  </div>
+
+  <div class="summary-container">
+    <div>
+      <div>ssCpuRawSystem</div>
+      <div class="h6">{{cpuModel.ssCpu_raw_system}}</div>
+    </div>
+
+    <div>
+      <div>ssCpuRawNice</div>
+      <div class="h6">{{cpuModel.ssCpu_raw_nice}}</div>
+    </div>
+  </div>
+
+</nb-card>

@@ -1,0 +1,25 @@
+<nb-card>
+
+  <nb-card-header>
+    <span>Carga</span>
+    <button nbButton (click)="actualizar()">Actualizar</button>
+  </nb-card-header>
+
+  <div class="summary-container">
+    <div>
+      <div>1 min</div>
+      <div class="h6">{{loadModel.load_one_minute}}</div>
+    </div>
+
+    <div>
+      <div>5 min</div>
+      <div class="h6">{{loadModel.load_five_minutes}}</div>
+    </div>
+
+    <div>
+      <div>15 min</div>
+      <div class="h6">{{loadModel.load_fifteen_minutes}}</div>
+    </div>
+  </div>
+
+</nb-card>

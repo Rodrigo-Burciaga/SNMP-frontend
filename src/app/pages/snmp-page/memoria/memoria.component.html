@@ -1,0 +1,103 @@
+<div class="row">
+  <div class="col-4">
+    <nb-card>
+
+      <nb-card-header>
+        <span>Memoria</span>
+        <button nbButton (click)="actualizar()">Actualizar</button>
+      </nb-card-header>
+
+      <div class="summary-container">
+        <div>
+          <div>Memoria en Buffer</div>
+          <div class="h6">{{memoryModel.total_buffer}}</div>
+        </div>
+
+        <div>
+          <div>Cache</div>
+          <div class="h6">{{memoryModel.cached}}</div>
+        </div>
+      </div>
+
+      <nb-list class="user-activity-list">
+        <nb-list-item>
+          <div class="visited-date">
+            Swap
+          </div>
+          <div class="visited-pages-count">
+            <div class="caption">Usada</div>
+            <div class="value">
+              {{memoryModel.total_swap - memoryModel.avail_swap}}
+            </div>
+          </div>
+          <div class="visited-percentages">
+            <div class="caption">Disponible</div>
+            <div class="delta value">
+              {{memoryModel.avail_swap}}
+            </div>
+          </div>
+        </nb-list-item>
+
+        <nb-list-item>
+          <div class="visited-date">
+        Real
+      </div>
+          <div class="visited-pages-count">
+            <div class="caption">Usada</div>
+            <div class="value">
+              {{memoryModel.total_free}}
+            </div>
+          </div>
+          <div class="visited-percentages">
+            <div class="caption">Disponible</div>
+            <div class="delta value">
+              {{memoryModel.total_free - memoryModel.avail_real}}
+            </div>
+          </div>
+        </nb-list-item>
+
+        <nb-list-item>
+          <div class="visited-date">
+            Memoria total
+          </div>
+          <div class="visited-pages-count">
+            <div class="caption">Libre</div>
+            <div class="value">
+              {{memoryModel.total_real}}
+            </div>
+          </div>
+          <div class="visited-percentages">
+            <div class="caption">Compartida</div>
+            <div class="delta value">
+              {{memoryModel.total_real - memoryModel.shared}}
+            </div>
+          </div>
+        </nb-list-item>
+
+      </nb-list>
+
+    </nb-card>
+  </div>
+
+  <div class="col-4">
+    <nb-card>
+      <nb-card-header>
+        Memoria Swap
+      </nb-card-header>
+      <nb-card-body>
+        <div echarts [options]="optionsSwap" class="echart" (chartInit)="onChartInit($event)"></div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+
+  <div class="col-4">
+    <nb-card>
+      <nb-card-header>
+        Memoria Real
+      </nb-card-header>
+      <nb-card-body>
+        <div echarts [options]="optionsReal" class="echart"></div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>
