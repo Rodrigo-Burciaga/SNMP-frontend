@@ -20,6 +20,7 @@ import {
   NbListModule,
   NbIconModule,
   NbInputModule,
+  NbSpinnerModule,
 } from '@nebular/theme';
 
 @NgModule({
@@ -47,6 +48,7 @@ import {
     NbIconModule,
     NbButtonModule,
     NgxEchartsModule,
+    NbSpinnerModule,
   ],
 })
 export class SnmpPageModule {}

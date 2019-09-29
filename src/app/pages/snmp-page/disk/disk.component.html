@@ -1,4 +1,4 @@
-<nb-card size="tiny" class="solar-card">
+<nb-card size="tiny" class="solar-card" [nbSpinner]="isCharge" nbSpinnerStatus="success">
   <nb-card-header>Disco duro</nb-card-header>
   <nb-card-body>
     <div echarts [options]="option" class="echart"></div>

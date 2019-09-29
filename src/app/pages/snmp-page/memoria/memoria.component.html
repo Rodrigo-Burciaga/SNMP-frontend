@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-4">
-    <nb-card>
+    <nb-card [nbSpinner]="isCharge" nbSpinnerStatus="success">
 
       <nb-card-header>
         <span>Memoria</span>
@@ -80,7 +80,7 @@
   </div>
 
   <div class="col-4">
-    <nb-card>
+    <nb-card [nbSpinner]="isCharge" nbSpinnerStatus="success">
       <nb-card-header>
         Memoria Swap
       </nb-card-header>
@@ -91,7 +91,7 @@
   </div>
 
   <div class="col-4">
-    <nb-card>
+    <nb-card [nbSpinner]="isCharge" nbSpinnerStatus="success">
       <nb-card-header>
         Memoria Real
       </nb-card-header>

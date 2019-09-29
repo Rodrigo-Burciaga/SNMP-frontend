@@ -1,8 +1,15 @@
+import { ActivatedRoute } from '@angular/router'
 import { AgentsService } from '../../../agents.service'
 import { Component, OnDestroy } from '@angular/core'
 import { CPUModel } from '../../../models/cpu'
 import { delay } from 'rxjs/operators'
-import { NbThemeService } from '@nebular/theme'
+import { forkJoin } from 'rxjs'
+import {
+  NbThemeService,
+  NbComponentStatus,
+  NbGlobalPhysicalPosition,
+  NbToastrService,
+} from '@nebular/theme';
 
 @Component({
   selector: 'ngx-cpu',
@@ -11,6 +18,7 @@ import { NbThemeService } from '@nebular/theme'
 })
 export class CPUComponent implements OnDestroy {
   cpuModel: CPUModel = new CPUModel();
+  isCharge: boolean;
   metrics = [
     '.1.3.6.1.4.1.2021.11.50.0',
     '.1.3.6.1.4.1.2021.11.53.0',
@@ -23,14 +31,23 @@ export class CPUComponent implements OnDestroy {
   }
 
   getAll() {
-    this.metrics.forEach(oid => {
-      this.agentsService.getMetric(oid).subscribe(
-        data => {
+    this.isCharge = true;
+    forkJoin(
+      this.metrics.map(oid => {
+        return this.agentsService.getMetric(oid);
+      }),
+    ).subscribe(
+      res => {
+        res.forEach(data => {
           this.parseResponse(data);
-        },
-        error => console.log(error),
-      );
-    });
+        });
+      },
+      error => {
+        this.makeToast();
+        this.isCharge = false;
+      },
+      () => (this.isCharge = false),
+    );
   }
 
   parseResponse(response) {
@@ -40,9 +57,37 @@ export class CPUComponent implements OnDestroy {
   constructor(
     private theme: NbThemeService,
     private agentsService: AgentsService,
+    private activeRoute: ActivatedRoute,
+    private toastrService: NbToastrService,
   ) {
-    this.getAll();
+    // this.getAll();
   }
 
   ngOnDestroy() {}
+
+  ngOnInit() {
+    this.activeRoute.params.subscribe(routeParams => {
+      console.log('update');
+      this.cpuModel = new CPUModel();
+      this.getAll();
+    });
+  }
+
+  makeToast() {
+    this.showToast('danger', 'Error', 'No se pudo obtener los datos del CPU');
+  }
+
+  private showToast(type: NbComponentStatus, title: string, body: string) {
+    const config = {
+      status: type,
+      destroyByClick: true,
+      duration: 10000,
+      hasIcon: true,
+      position: NbGlobalPhysicalPosition.TOP_RIGHT,
+      preventDuplicates: true,
+    };
+    const titleContent = title ? `${title}` : '';
+
+    this.toastrService.show(body, `${titleContent}`, config);
+  }
 }

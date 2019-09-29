@@ -1,8 +1,15 @@
+import { ActivatedRoute } from '@angular/router'
 import { AgentsService } from '../../../agents.service'
 import { Component, OnDestroy } from '@angular/core'
 import { delay } from 'rxjs/operators'
 import { DiskModel } from './../../../models/disk'
-import { NbThemeService } from '@nebular/theme'
+import { forkJoin } from 'rxjs'
+import {
+  NbThemeService,
+  NbToastrService,
+  NbGlobalPhysicalPosition,
+  NbComponentStatus,
+} from '@nebular/theme';
 
 @Component({
   selector: 'ngx-disk',
@@ -12,13 +19,15 @@ import { NbThemeService } from '@nebular/theme'
 export class DiskComponent implements OnDestroy {
   private alive = true;
   diskModel: DiskModel = new DiskModel();
+  isCharge: boolean = true;
   metrics = [
-    '.1.3.6.1.4.1.2021.9.1.2.1',
+    // '.1.3.6.1.4.1.2021.9.1.2.1',
     '.1.3.6.1.4.1.2021.9.1.7.3',
     '.1.3.6.1.4.1.2021.9.1.6.3',
     '.1.3.6.1.4.1.2021.9.1.8.3',
     '.1.3.6.1.4.1.2021.9.1.9.3',
   ];
+  data;
   value = 30;
   option: any = {};
   themeSubscription: any;
@@ -27,15 +36,32 @@ export class DiskComponent implements OnDestroy {
     this.getAll();
   }
 
+  createFork() {
+    return forkJoin(
+      this.metrics.map(oid => {
+        return this.agentsService.getMetric(oid);
+      }),
+    );
+  }
+
   getAll() {
-    this.metrics.forEach(oid => {
-      this.agentsService.getMetric(oid).subscribe(
-        data => {
+    this.isCharge = true;
+    forkJoin(
+      this.metrics.map(oid => {
+        return this.agentsService.getMetric(oid);
+      }),
+    ).subscribe(
+      res => {
+        res.forEach(data => {
           this.parseResponse(data);
-        },
-        error => console.log(error),
-      );
-    });
+        });
+      },
+      error => {
+        this.makeToast();
+        this.isCharge = false;
+      },
+      () => (this.isCharge = false),
+    );
   }
 
   parseResponse(response) {
@@ -59,8 +85,10 @@ export class DiskComponent implements OnDestroy {
   constructor(
     private theme: NbThemeService,
     private agentsService: AgentsService,
+    private activeRoute: ActivatedRoute,
+    private toastrService: NbToastrService,
   ) {
-    this.getAll();
+    // this.getAll();
   }
 
   chargeDiskChart() {
@@ -208,6 +236,33 @@ export class DiskComponent implements OnDestroy {
 
   ngOnDestroy() {
     this.alive = false;
-    this.themeSubscription.unsubscribe();
+    this.themeSubscription ? this.themeSubscription.unsubscribe() : null;
+  }
+
+  ngOnInit() {
+    this.activeRoute.params.subscribe(routeParams => {
+      console.log('update');
+      this.diskModel = new DiskModel();
+      this.value = 0;
+      this.getAll();
+    });
+  }
+
+  makeToast() {
+    this.showToast('danger', 'Error', 'No se pudo obtener los datos del disco');
+  }
+
+  private showToast(type: NbComponentStatus, title: string, body: string) {
+    const config = {
+      status: type,
+      destroyByClick: true,
+      duration: 10000,
+      hasIcon: true,
+      position: NbGlobalPhysicalPosition.TOP_RIGHT,
+      preventDuplicates: true,
+    };
+    const titleContent = title ? `${title}` : '';
+
+    this.toastrService.show(body, `${titleContent}`, config);
   }
 }

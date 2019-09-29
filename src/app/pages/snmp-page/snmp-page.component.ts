@@ -40,7 +40,6 @@ export class SnmpPageComponent {
         this.agente.id_agent = data.data.id;
         this.agentes.push(this.agente);
         localStorage.setItem('agentes_snmp', JSON.stringify(this.agentes));
-        console.log(this.agente);
 
         this.menuService.addItems(
           [

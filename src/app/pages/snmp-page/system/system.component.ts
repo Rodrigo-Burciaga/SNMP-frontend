@@ -1,8 +1,15 @@
+import { ActivatedRoute } from '@angular/router'
 import { AgentsService } from './../../../agents.service'
 import { Component, OnDestroy } from '@angular/core'
 import { delay } from 'rxjs/operators'
-import { NbThemeService } from '@nebular/theme'
+import { forkJoin } from 'rxjs'
 import { SystemModel } from './../../../models/system'
+import {
+  NbThemeService,
+  NbComponentStatus,
+  NbGlobalPhysicalPosition,
+  NbToastrService,
+} from '@nebular/theme';
 
 @Component({
   selector: 'ngx-system',
@@ -10,13 +17,13 @@ import { SystemModel } from './../../../models/system'
   templateUrl: './system.component.html',
 })
 export class SystemComponent implements OnDestroy {
-  private alive = true;
+  isCharge: boolean = true;
   private metrics = [
     '.1.3.6.1.2.1.1.3.0',
     '.1.3.6.1.2.1.1.4.0',
     '.1.3.6.1.2.1.1.5.0',
     '.1.3.6.1.2.1.1.6.0',
-    '.1.3.6.1.2.1.25.1.2.0',
+    // '.1.3.6.1.2.1.25.1.2.0',
     '.1.3.6.1.2.1.25.1.5.0',
     '.1.3.6.1.2.1.25.1.6.0',
     '.1.3.6.1.2.1.25.1.7.0',
@@ -29,11 +36,11 @@ export class SystemComponent implements OnDestroy {
   constructor(
     private theme: NbThemeService,
     private agentsService: AgentsService,
+    private activeRoute: ActivatedRoute,
+    private toastrService: NbToastrService,
   ) {
-    this.getAll();
+    // this.getAll();
   }
-
-  OnInit() {}
 
   set chartValue(value: number) {
     this.value = value;
@@ -46,14 +53,23 @@ export class SystemComponent implements OnDestroy {
   }
 
   getAll() {
-    this.metrics.forEach(oid => {
-      this.agentsService.getMetric(oid).subscribe(
-        data => {
+    this.isCharge = true;
+    forkJoin(
+      this.metrics.map(oid => {
+        return this.agentsService.getMetric(oid);
+      }),
+    ).subscribe(
+      res => {
+        res.forEach(data => {
           this.parseResponse(data);
-        },
-        error => console.log(error),
-      );
-    });
+        });
+      },
+      error => {
+        this.makeToast();
+        this.isCharge = false;
+      },
+      () => (this.isCharge = false),
+    );
   }
 
   parseResponse(response) {
@@ -205,7 +221,36 @@ export class SystemComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.alive = false;
     this.themeSubscription.unsubscribe();
+  }
+
+  ngOnInit() {
+    this.activeRoute.params.subscribe(routeParams => {
+      console.log('update');
+      this.systemModel = new SystemModel();
+      this.getAll();
+    });
+  }
+
+  makeToast() {
+    this.showToast(
+      'danger',
+      'Error',
+      'No se pudo obtener los datos del sistema',
+    );
+  }
+
+  private showToast(type: NbComponentStatus, title: string, body: string) {
+    const config = {
+      status: type,
+      destroyByClick: true,
+      duration: 10000,
+      hasIcon: true,
+      position: NbGlobalPhysicalPosition.TOP_RIGHT,
+      preventDuplicates: true,
+    };
+    const titleContent = title ? `${title}` : '';
+
+    this.toastrService.show(body, `${titleContent}`, config);
   }
 }
