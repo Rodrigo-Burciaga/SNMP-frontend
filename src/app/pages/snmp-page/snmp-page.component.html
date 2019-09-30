@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-12" *ngIf="isNew">
     <nb-card class="inline-form-card">
       <nb-card-header>Agregar Agente</nb-card-header>
       <nb-card-body>
@@ -7,15 +7,41 @@
           <input type="text" nbInput fullWidth placeholder="Nombre" [(ngModel)]="agente.name" [ngModelOptions]="{standalone: true}">
           <input type="text" nbInput fullWidth placeholder="IP" [(ngModel)]="agente.ip" [ngModelOptions]="{standalone: true}">
           <input type="text" nbInput fullWidth placeholder="Port" [(ngModel)]="agente.port" [ngModelOptions]="{standalone: true}">
-          <button type="submit" nbButton status="primary" *ngIf="isNew" (click)='createAgent'>Agregar</button>
+          <button type="submit" nbButton status="primary"  (click)='createAgent'>Agregar</button>
           <button type="submit" nbButton status="primary" *ngIf="!isNew" (click)='updateAgent'>Actualizar</button>
+        </form>
+      </nb-card-body>
+    </nb-card>
+  </div>
+
+  <div class="col-md-12" *ngIf="!isNew">
+    <nb-card class="inline-form-card">
+      <nb-card-header>
+        <span>Agente</span>
+        <button nbButton (click)="showHistorial()" *ngIf="!showHistory" ghost>
+          <nb-icon icon="clock"></nb-icon>
+        </button>
+        <button nbButton (click)="showHistorial()" *ngIf="showHistory" ghost>
+          <nb-icon icon="undo"></nb-icon>
+        </button>
+      </nb-card-header>
+      <nb-card-body>
+        <form class="form-inline" (ngSubmit)="updateAgent(agente.id_agent)">
+          <input type="text" nbInput fullWidth placeholder="Nombre" [(ngModel)]="agente.name" [ngModelOptions]="{standalone: true}">
+          <input type="text" nbInput fullWidth placeholder="IP" [(ngModel)]="agente.ip" [ngModelOptions]="{standalone: true}">
+          <input type="text" nbInput fullWidth placeholder="Port" [(ngModel)]="agente.port" [ngModelOptions]="{standalone: true}">
+          <button type="submit" nbButton status="primary" (click)='updateAgent'>Actualizar IP</button>
         </form>
       </nb-card-body>
     </nb-card>
   </div>
 </div>
 
-<div *ngIf="!isNew">
+<div *ngIf="showHistory">
+  <ngx-history></ngx-history>
+</div>
+
+<div *ngIf="!isNew && !showHistory">
 
   <ngx-system></ngx-system>
 

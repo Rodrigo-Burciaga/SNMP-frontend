@@ -12,6 +12,7 @@ import { NbMenuService } from '@nebular/theme'
 export class SnmpPageComponent {
   agente: Agent = new Agent();
   isNew: boolean;
+  showHistory: boolean = false;
   agentes: Agent[];
   constructor(
     private route: ActivatedRoute,
@@ -23,9 +24,13 @@ export class SnmpPageComponent {
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       if (params.params.id) {
+        this.showHistory = false;
         localStorage.setItem('snmp_agent_id', params.params.id);
+        this.agentes = JSON.parse(localStorage.getItem('agentes_snmp'));
+        this.agente = this.agentes.find(a => a.id_agent === params.params.id);
         this.isNew = false;
       } else {
+        this.agente = new Agent();
         this.isNew = true;
       }
     });
@@ -56,5 +61,25 @@ export class SnmpPageComponent {
       },
       error => console.log(error),
     );
+  }
+
+  updateAgent(id_agent) {
+    // localStorage.setItem('snmp_agent_id', id_agent);
+    // const agentes = JSON.parse(localStorage.getItem('agentes_snmp'));
+    // const agente = this.agentes.find(a => a.id_agent === id_agent);
+    // const index = this.agentes.findIndex(
+    //   item => item.id_agent == agente.id_agent,
+    // );
+    // console.log(agente);
+    // console.log(this.agente);
+    // console.log(this.agentes);
+    localStorage.setItem('agentes_snmp', JSON.stringify(this.agentes));
+    this.router.navigateByUrl(`/pages/snmp/`);
+    // this.router.navigateByUrl(`/pages/snmp/${this.agente.id_agent}`);
+    // console.log(index);
+  }
+
+  showHistorial() {
+    this.showHistory = !this.showHistory;
   }
 }

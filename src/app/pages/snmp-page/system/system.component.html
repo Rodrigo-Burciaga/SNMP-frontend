@@ -19,7 +19,7 @@
     <nb-card [nbSpinner]="isCharge" nbSpinnerStatus="success">
       <nb-card-header>Datos de contacto del dispositivo</nb-card-header>
       <nb-card-body>
-        <form>
+        <form (ngSubmit)="updateSystem()">
           <div class="form-group">
             <label for="exampleInputEmail1" class="label">Contacto</label>
             <input type="text" nbInput fullWidth id="exampleInputEmail1" placeholder="Contacto" [(ngModel)]="systemModel.system_contact" [ngModelOptions]="{standalone: true}">

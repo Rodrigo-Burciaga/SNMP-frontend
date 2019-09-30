@@ -28,6 +28,11 @@ export class SystemComponent implements OnDestroy {
     '.1.3.6.1.2.1.25.1.6.0',
     '.1.3.6.1.2.1.25.1.7.0',
   ];
+  private toUpdate = [
+    '.1.3.6.1.2.1.1.4.0', //contacto
+    '.1.3.6.1.2.1.1.5.0', //Sysname
+    '.1.3.6.1.2.1.1.6.0', //Location
+  ];
   systemModel: SystemModel = new SystemModel();
   value = 70;
   option: any = {};
@@ -40,6 +45,32 @@ export class SystemComponent implements OnDestroy {
     private toastrService: NbToastrService,
   ) {
     // this.getAll();
+  }
+
+  updateSystem() {
+    this.isCharge = true;
+    const upContacto = this.agentsService.updateAgent(
+      this.toUpdate[0],
+      this.systemModel.system_contact,
+    );
+    const upSysName = this.agentsService.updateAgent(
+      this.toUpdate[1],
+      this.systemModel.system_name,
+    );
+    const upLocation = this.agentsService.updateAgent(
+      this.toUpdate[2],
+      this.systemModel.system_location,
+    );
+    forkJoin([upContacto, upSysName, upLocation]).subscribe(
+      res => {
+        console.log('update')
+      },
+      error => {
+        this.makeToast();
+        this.isCharge = false;
+      },
+      () => (this.isCharge = false),
+    );
   }
 
   set chartValue(value: number) {
