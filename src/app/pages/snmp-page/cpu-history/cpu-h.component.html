@@ -1,7 +1,7 @@
 <nb-card [nbSpinner]="isCharge" nbSpinnerStatus="success">
 
   <nb-card-header>
-    <span>Historial Procesos</span>
+    <span>CPU Historial</span>
   </nb-card-header>
 
   <div class="row">
@@ -12,22 +12,16 @@
       <br>
       <br>
       <br>
-      <nb-radio-group [name]="charName" >
+      <nb-radio-group [name]="charName">
         <nb-radio *ngFor="let option of optionsChar"
                 [checked]="option.checked"
                 [disabled]="option.disabled"
-                (valueChange)="updateCharProcesses($event)"
+                (valueChange)="updateCharDisk($event)"
                 [value]="option.value">
           {{ option.label }}
         </nb-radio>
       </nb-radio-group>
-
     </div>
   </div>
+
 </nb-card>
-
-<ngx-disk-h></ngx-disk-h>
-
-<ngx-memory-h></ngx-memory-h>
-
-<ngx-load-h></ngx-load-h>

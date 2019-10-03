@@ -5,6 +5,7 @@ import { DiskHComponent } from './disk-history/disk-h.component'
 import { FormsModule } from '@angular/forms'
 import { HistoryComponent } from './history/history.component'
 import { LoadComponent } from './load/load.component'
+import { LoadHComponent } from './load-history/load-h.component'
 import { MemoryComponent } from './memoria/memoria.component'
 import { NgModule } from '@angular/core'
 import { NgxEchartsModule } from 'ngx-echarts'
@@ -26,6 +27,7 @@ import {
   NbSpinnerModule,
 } from '@nebular/theme';
 import { MemoryHComponent } from './memory-history copy/memory-h.component';
+import { CPUHComponent } from './cpu-history/cpu-h.component'
 
 @NgModule({
   declarations: [
@@ -39,6 +41,8 @@ import { MemoryHComponent } from './memory-history copy/memory-h.component';
     DiskHComponent,
     RamHComponent,
     MemoryHComponent,
+    LoadHComponent,
+    CPUHComponent
   ],
   imports: [
     NbInputModule,

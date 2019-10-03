@@ -21,11 +21,11 @@ export class HistoryComponent implements OnDestroy {
   options: any = {};
   charName = 'procesos';
   optionsChar = [
-    { value: '1', label: 'Option 1', checked: true },
-    { value: '2', label: 'Option 2' },
-    { value: '3', label: 'Option 3' },
-    { value: '4', label: 'Option 4' },
-    { value: '4', label: 'Option 5' },
+    { value: '1', label: '5 minutos', checked: true },
+    { value: '2', label: '15 minutos' },
+    { value: '3', label: '1 hora' },
+    { value: '4', label: '5 hora' },
+    { value: '5', label: '1 dia' },
   ];
   themeSubscription: any;
 
@@ -38,6 +38,7 @@ export class HistoryComponent implements OnDestroy {
   }
 
   getProccesses(time) {
+    this.isCharge = true;
     this.agentsService.getProcessesHistory(time).subscribe(
       res => {
         console.log(res);
@@ -54,8 +55,12 @@ export class HistoryComponent implements OnDestroy {
         } else {
           this.makeToast('No hay datos');
         }
+        this.isCharge = false;
       },
-      error => this.makeToast('No se pudo obtener la informaciono de procesos'),
+      error => {
+        this.makeToast('No se pudo obtener la informaciono de procesos');
+        this.isCharge = true;
+      },
     );
   }
 
@@ -171,7 +176,7 @@ export class HistoryComponent implements OnDestroy {
         ],
         series: [
           {
-            name: 'Mail marketing',
+            name: 'Procesos',
             type: 'line',
             stack: 'Total amount',
             areaStyle: { normal: { opacity: echarts.areaOpacity } },

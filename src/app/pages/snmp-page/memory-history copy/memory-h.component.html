@@ -1,7 +1,7 @@
 <nb-card [nbSpinner]="isCharge" nbSpinnerStatus="success">
 
   <nb-card-header>
-    <span>Disco Historial</span>
+    <span>Memoria Ram Historial</span>
     <button nbButton (click)="actualizar()">Actualizar</button>
   </nb-card-header>
 
@@ -17,7 +17,36 @@
         <nb-radio *ngFor="let option of optionsChar"
                 [checked]="option.checked"
                 [disabled]="option.disabled"
-                (valueChange)="updateCharDisk($event)"
+                (valueChange)="updateCharMemory($event)"
+                [value]="option.value">
+          {{ option.label }}
+        </nb-radio>
+      </nb-radio-group>
+    </div>
+  </div>
+
+</nb-card>
+
+<nb-card [nbSpinner]="isCharge" nbSpinnerStatus="success">
+
+  <nb-card-header>
+    <span>Memoria Swap Historial</span>
+    <button nbButton (click)="actualizar()">Actualizar</button>
+  </nb-card-header>
+
+  <div class="row">
+    <div class="col-10">
+      <div echarts [options]="optionsSwap" class="echart"></div>
+    </div>
+    <div class="col-2">
+      <br>
+      <br>
+      <br>
+      <nb-radio-group [name]="charNameSwap">
+        <nb-radio *ngFor="let option of optionsChar"
+                [checked]="option.checked"
+                [disabled]="option.disabled"
+                (valueChange)="updateCharMemory($event)"
                 [value]="option.value">
           {{ option.label }}
         </nb-radio>

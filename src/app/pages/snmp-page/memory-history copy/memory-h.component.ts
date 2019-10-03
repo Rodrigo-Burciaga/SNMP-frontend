@@ -1,9 +1,9 @@
-import { ActivatedRoute } from '@angular/router'
-import { AgentsService } from '../../../agents.service'
-import { Component, OnDestroy } from '@angular/core'
-import { CPUModel } from '../../../models/cpu'
-import { delay } from 'rxjs/operators'
-import { forkJoin } from 'rxjs'
+import { ActivatedRoute } from '@angular/router';
+import { AgentsService } from '../../../agents.service';
+import { Component, OnDestroy } from '@angular/core';
+import { CPUModel } from '../../../models/cpu';
+import { delay } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
 import {
   NbThemeService,
   NbComponentStatus,
@@ -18,14 +18,16 @@ import {
 })
 export class MemoryHComponent implements OnDestroy {
   charName = 'memory';
+  charNameSwap = 'memory_swap';
   themeSubscription: any;
   options: any;
+  optionsSwap: any;
   optionsChar = [
-    { value: '1', label: 'Option 1', checked: true },
-    { value: '2', label: 'Option 2' },
-    { value: '3', label: 'Option 3' },
-    { value: '4', label: 'Option 4' },
-    { value: '4', label: 'Option 5' },
+    { value: '1', label: '5 minutos', checked: true },
+    { value: '2', label: '15 minutos' },
+    { value: '3', label: '1 hora' },
+    { value: '4', label: '5 hora' },
+    { value: '5', label: '1 dia' },
   ];
 
   isCharge: boolean;
@@ -66,6 +68,7 @@ export class MemoryHComponent implements OnDestroy {
   }
 
   getMemory(time) {
+    this.isCharge = true;
     this.agentsService.getMemoryHistory(time).subscribe(
       res => {
         console.log(res);
@@ -75,17 +78,23 @@ export class MemoryHComponent implements OnDestroy {
           const time = new Array();
           res.data.memory.forEach(metric => {
             data.push(metric.avail_ram / 1000000);
-            data.push(metric.avail_swap / 1000000);
+            data2.push(metric.avail_swap / 1000000);
             time.push(metric.date);
           });
           console.log(data);
+          console.log(data2);
           console.log(time);
           this.showMemoryChart(data, time);
+          this.showMemoryChartSwap(data2, time)
         } else {
           this.makeToast('No hay datos');
         }
+        this.isCharge = false;
       },
-      error => this.makeToast('No se pudo obtener la informaciono de memoria'),
+      error => {
+        this.makeToast('No se pudo obtener la informaciono de memoria');
+        this.isCharge = false;
+      },
     );
   }
 
@@ -97,11 +106,11 @@ export class MemoryHComponent implements OnDestroy {
       this.options = {
         backgroundColor: echarts.bg,
         color: [
-          colors.warningLight,
           colors.infoLight,
           colors.dangerLight,
           colors.successLight,
           colors.primaryLight,
+          colors.warningLight,
         ],
         tooltip: {
           trigger: 'axis',
@@ -113,7 +122,7 @@ export class MemoryHComponent implements OnDestroy {
           },
         },
         legend: {
-          data: ['Procesos'],
+          data: ['Memoria Ram'],
           textStyle: {
             color: echarts.textColor,
           },
@@ -169,6 +178,96 @@ export class MemoryHComponent implements OnDestroy {
             name: 'Memoria ram',
             type: 'line',
             stack: 'Total amount',
+            color: colors.infoLight,
+            areaStyle: { normal: { opacity: echarts.areaOpacity } },
+            data: data,
+          },
+        ],
+      };
+    });
+  }
+
+   showMemoryChartSwap(data, time) {
+    this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
+      const colors: any = config.variables;
+      const echarts: any = config.variables.echarts;
+
+      this.optionsSwap = {
+        backgroundColor: echarts.bg,
+        color: [
+          colors.infoLight,
+          colors.dangerLight,
+          colors.successLight,
+          colors.primaryLight,
+          colors.warningLight,
+        ],
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: echarts.tooltipBackgroundColor,
+            },
+          },
+        },
+        legend: {
+          data: ['Memoria Swap'],
+          textStyle: {
+            color: echarts.textColor,
+          },
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true,
+        },
+        xAxis: [
+          {
+            type: 'category',
+            boundaryGap: false,
+            data: time,
+            axisTick: {
+              alignWithLabel: true,
+            },
+            axisLine: {
+              lineStyle: {
+                color: echarts.axisLineColor,
+              },
+            },
+            axisLabel: {
+              textStyle: {
+                color: echarts.textColor,
+              },
+            },
+          },
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            axisLine: {
+              lineStyle: {
+                color: echarts.axisLineColor,
+              },
+            },
+            splitLine: {
+              lineStyle: {
+                color: echarts.splitLineColor,
+              },
+            },
+            axisLabel: {
+              textStyle: {
+                color: echarts.textColor,
+              },
+            },
+          },
+        ],
+        series: [
+          {
+            name: 'Memoria swap',
+            type: 'line',
+            stack: 'Total amount',
+            color: colors.infoLight,
             areaStyle: { normal: { opacity: echarts.areaOpacity } },
             data: data,
           },

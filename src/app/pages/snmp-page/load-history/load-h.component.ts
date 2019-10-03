@@ -1,9 +1,9 @@
-import { ActivatedRoute } from '@angular/router'
-import { AgentsService } from '../../../agents.service'
-import { Component, OnDestroy } from '@angular/core'
-import { CPUModel } from '../../../models/cpu'
-import { delay } from 'rxjs/operators'
-import { forkJoin } from 'rxjs'
+import { ActivatedRoute } from '@angular/router';
+import { AgentsService } from '../../../agents.service';
+import { Component, OnDestroy } from '@angular/core';
+import { CPUModel } from '../../../models/cpu';
+import { delay } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
 import {
   NbThemeService,
   NbComponentStatus,
@@ -11,17 +11,13 @@ import {
   NbToastrService,
 } from '@nebular/theme';
 
-interface response {
-  data: any;
-}
-
 @Component({
-  selector: 'ngx-disk-h',
-  styleUrls: ['./disk-h.component.scss'],
-  templateUrl: './disk-h.component.html',
+  selector: 'ngx-load-h',
+  styleUrls: ['./load-h.component.scss'],
+  templateUrl: './load-h.component.html',
 })
-export class DiskHComponent implements OnDestroy {
-  charName = 'disk';
+export class LoadHComponent implements OnDestroy {
+  charName = 'load';
   themeSubscription: any;
   options: any;
   optionsChar = [
@@ -71,14 +67,14 @@ export class DiskHComponent implements OnDestroy {
 
   getDisk(time) {
     this.isCharge = true;
-    this.agentsService.getDiskHistory(time).subscribe(
+    this.agentsService.getLoadHistory(time).subscribe(
       res => {
         console.log(res);
         if (res.data) {
           const data = new Array();
           const time = new Array();
-          res.data.disk.forEach(metric => {
-            data.push(metric.avail_disk / 1000000);
+          res.data.load.forEach(metric => {
+            data.push(metric.load);
             time.push(metric.date);
           });
           console.log(data);
@@ -120,7 +116,7 @@ export class DiskHComponent implements OnDestroy {
           },
         },
         legend: {
-          data: ['Espacio en disco'],
+          data: ['Carga'],
           textStyle: {
             color: echarts.textColor,
           },
@@ -173,7 +169,7 @@ export class DiskHComponent implements OnDestroy {
         ],
         series: [
           {
-            name: 'Espacio en Disco',
+            name: 'Carga',
             type: 'line',
             stack: 'Total amount',
             areaStyle: { normal: { opacity: echarts.areaOpacity } },

@@ -19,6 +19,7 @@ import {
 export class SystemComponent implements OnDestroy {
   isCharge: boolean = true;
   private metrics = [
+    '.1.3.6.1.2.1.1.1.0',
     '.1.3.6.1.2.1.1.3.0',
     '.1.3.6.1.2.1.1.4.0',
     '.1.3.6.1.2.1.1.5.0',
@@ -63,7 +64,7 @@ export class SystemComponent implements OnDestroy {
     );
     forkJoin([upContacto, upSysName, upLocation]).subscribe(
       res => {
-        console.log('update')
+        console.log('update');
       },
       error => {
         this.makeToast();

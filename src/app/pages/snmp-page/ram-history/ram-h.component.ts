@@ -19,12 +19,14 @@ import {
 export class RamHComponent implements OnDestroy {
   charName = 'ram';
   themeSubscription: any;
+  options: any;
   optionsChar = [
-    { value: '1', label: 'Option 1', checked: true },
-    { value: '2', label: 'Option 2' },
-    { value: '3', label: 'Option 3' },
-    { value: '4', label: 'Option 4' },
-    { value: '4', label: 'Option 5' },
+    { value: '1', label: '5 minutos', checked: true },
+    { value: '2', label: '15 minutos' },
+    { value: '3', label: '1 hora' },
+    { value: '4', label: '5 hora' },
+    { value: '5', label: '1 dia' },
+    ,
   ];
 
   isCharge: boolean;

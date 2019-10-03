@@ -11,17 +11,13 @@ import {
   NbToastrService,
 } from '@nebular/theme';
 
-interface response {
-  data: any;
-}
-
 @Component({
-  selector: 'ngx-disk-h',
-  styleUrls: ['./disk-h.component.scss'],
-  templateUrl: './disk-h.component.html',
+  selector: 'ngx-cpu-h',
+  styleUrls: ['./cpu-h.component.scss'],
+  templateUrl: './cpu-h.component.html',
 })
-export class DiskHComponent implements OnDestroy {
-  charName = 'disk';
+export class CPUHComponent implements OnDestroy {
+  charName = 'cpu';
   themeSubscription: any;
   options: any;
   optionsChar = [
@@ -71,18 +67,17 @@ export class DiskHComponent implements OnDestroy {
 
   getDisk(time) {
     this.isCharge = true;
-    this.agentsService.getDiskHistory(time).subscribe(
+    this.agentsService.getCPUHistory(time).subscribe(
       res => {
         console.log(res);
         if (res.data) {
           const data = new Array();
           const time = new Array();
-          res.data.disk.forEach(metric => {
-            data.push(metric.avail_disk / 1000000);
+          res.data.percent_cpu.forEach(metric => {
+            data.push(metric.percentage_cpu);
             time.push(metric.date);
           });
           console.log(data);
-          console.log(time);
           this.showDiskChart(data, time);
         } else {
           this.makeToast('No hay datos');
@@ -120,7 +115,7 @@ export class DiskHComponent implements OnDestroy {
           },
         },
         legend: {
-          data: ['Espacio en disco'],
+          data: ['Carga'],
           textStyle: {
             color: echarts.textColor,
           },
@@ -173,7 +168,7 @@ export class DiskHComponent implements OnDestroy {
         ],
         series: [
           {
-            name: 'Espacio en Disco',
+            name: 'Carga',
             type: 'line',
             stack: 'Total amount',
             areaStyle: { normal: { opacity: echarts.areaOpacity } },

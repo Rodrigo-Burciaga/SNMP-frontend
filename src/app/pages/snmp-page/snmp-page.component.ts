@@ -4,6 +4,10 @@ import { AgentsService } from '../../agents.service'
 import { Component, OnInit } from '@angular/core'
 import { NbMenuService } from '@nebular/theme'
 
+interface Parametros {
+  params: any;
+}
+
 @Component({
   selector: 'ngx-snmp-page',
   templateUrl: './snmp-page.component.html',
@@ -23,11 +27,13 @@ export class SnmpPageComponent {
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
-      if (params.params.id) {
+      if (this.route.snapshot.params['id']) {
         this.showHistory = false;
-        localStorage.setItem('snmp_agent_id', params.params.id);
+        localStorage.setItem('snmp_agent_id', this.route.snapshot.params['id']);
         this.agentes = JSON.parse(localStorage.getItem('agentes_snmp'));
-        this.agente = this.agentes.find(a => a.id_agent === params.params.id);
+        this.agente = this.agentes.find(
+          a => a.id_agent === this.route.snapshot.params['id'],
+        );
         this.isNew = false;
       } else {
         this.agente = new Agent();
