@@ -1,33 +1,34 @@
-import { ActivatedRoute } from '@angular/router'
-import { AgentsService } from '../../../agents.service'
-import { Component, OnDestroy } from '@angular/core'
-import { CPUModel } from '../../../models/cpu'
-import { delay } from 'rxjs/operators'
-import { forkJoin } from 'rxjs'
-import {
-  NbThemeService,
-  NbComponentStatus,
-  NbGlobalPhysicalPosition,
-  NbToastrService,
-} from '@nebular/theme';
+import {ActivatedRoute} from '@angular/router';
+import {AgentsService} from '../../../agents.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {NbComponentStatus, NbGlobalPhysicalPosition, NbThemeService, NbToastrService} from '@nebular/theme';
 
 @Component({
   selector: 'ngx-history',
   styleUrls: ['./history.component.scss'],
   templateUrl: './history.component.html',
 })
-export class HistoryComponent implements OnDestroy {
+export class HistoryComponent implements OnDestroy, OnInit {
   isCharge: boolean;
   options: any = {};
   charName = 'procesos';
   optionsChar = [
-    { value: '1', label: '5 minutos', checked: true },
-    { value: '2', label: '15 minutos' },
-    { value: '3', label: '1 hora' },
-    { value: '4', label: '5 hora' },
-    { value: '5', label: '1 dia' },
+    {value: '1', label: '5 minutos', checked: true},
+    {value: '2', label: '15 minutos'},
+    {value: '3', label: '1 hora'},
+    {value: '4', label: '5 hora'},
+    {value: '5', label: '1 dia'},
   ];
   themeSubscription: any;
+
+  constructor(
+    private agentsService: AgentsService,
+    private activeRoute: ActivatedRoute,
+    private toastrService: NbToastrService,
+    private theme: NbThemeService,
+  ) {
+    // this.getAll();
+  }
 
   actualizar() {
     this.getAll();
@@ -43,15 +44,15 @@ export class HistoryComponent implements OnDestroy {
       res => {
         console.log(res);
         if (res.data) {
-          const data = new Array();
-          const time = new Array();
+          const data = [];
+          const tiempo = [];
           res.data.number_processes.forEach(metric => {
             data.push(metric.processes);
-            time.push(metric.date);
+            tiempo.push(metric.date);
           });
           console.log(data);
-          console.log(time);
-          this.showProcessesChart(data, time);
+          console.log(tiempo);
+          this.showProcessesChart(data, tiempo);
         } else {
           this.makeToast('No hay datos');
         }
@@ -64,16 +65,8 @@ export class HistoryComponent implements OnDestroy {
     );
   }
 
-  constructor(
-    private agentsService: AgentsService,
-    private activeRoute: ActivatedRoute,
-    private toastrService: NbToastrService,
-    private theme: NbThemeService,
-  ) {
-    // this.getAll();
+  ngOnDestroy() {
   }
-
-  ngOnDestroy() {}
 
   ngOnInit() {
     this.activeRoute.params.subscribe(routeParams => {
@@ -83,20 +76,6 @@ export class HistoryComponent implements OnDestroy {
 
   makeToast(msg: string) {
     this.showToast('danger', 'Error', msg);
-  }
-
-  private showToast(type: NbComponentStatus, title: string, body: string) {
-    const config = {
-      status: type,
-      destroyByClick: true,
-      duration: 10000,
-      hasIcon: true,
-      position: NbGlobalPhysicalPosition.TOP_RIGHT,
-      preventDuplicates: true,
-    };
-    const titleContent = title ? `${title}` : '';
-
-    this.toastrService.show(body, `${titleContent}`, config);
   }
 
   showProcessesChart(data, time) {
@@ -179,7 +158,7 @@ export class HistoryComponent implements OnDestroy {
             name: 'Procesos',
             type: 'line',
             stack: 'Total amount',
-            areaStyle: { normal: { opacity: echarts.areaOpacity } },
+            areaStyle: {normal: {opacity: echarts.areaOpacity}},
             data: data,
           },
         ],
@@ -189,5 +168,19 @@ export class HistoryComponent implements OnDestroy {
 
   updateCharProcesses(e) {
     this.getProccesses(e);
+  }
+
+  private showToast(type: NbComponentStatus, title: string, body: string) {
+    const config = {
+      status: type,
+      destroyByClick: true,
+      duration: 10000,
+      hasIcon: true,
+      position: NbGlobalPhysicalPosition.TOP_RIGHT,
+      preventDuplicates: true,
+    };
+    const titleContent = title ? `${title}` : '';
+
+    this.toastrService.show(body, `${titleContent}`, config);
   }
 }

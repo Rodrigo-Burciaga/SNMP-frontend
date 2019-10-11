@@ -1,5 +1,4 @@
 import {ActivatedRoute} from '@angular/router';
-import {AgentsService} from '../../../agents.service';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NbComponentStatus, NbGlobalPhysicalPosition, NbThemeService, NbToastrService} from '@nebular/theme';
 
@@ -25,7 +24,6 @@ export class RamHComponent implements OnDestroy, OnInit {
 
   constructor(
     private theme: NbThemeService,
-    private agentsService: AgentsService,
     private activeRoute: ActivatedRoute,
     private toastrService: NbToastrService,
   ) {

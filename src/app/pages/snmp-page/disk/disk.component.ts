@@ -1,23 +1,17 @@
-import { ActivatedRoute } from '@angular/router'
-import { AgentsService } from '../../../agents.service'
-import { Component, OnDestroy } from '@angular/core'
-import { delay } from 'rxjs/operators'
-import { DiskModel } from './../../../models/disk'
-import { forkJoin } from 'rxjs'
-import {
-  NbThemeService,
-  NbToastrService,
-  NbGlobalPhysicalPosition,
-  NbComponentStatus,
-} from '@nebular/theme';
+import {ActivatedRoute} from '@angular/router';
+import {AgentsService} from '../../../agents.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {delay} from 'rxjs/operators';
+import {DiskModel} from './../../../models/disk';
+import {forkJoin} from 'rxjs';
+import {NbComponentStatus, NbGlobalPhysicalPosition, NbThemeService, NbToastrService} from '@nebular/theme';
 
 @Component({
   selector: 'ngx-disk',
   styleUrls: ['./disk.component.scss'],
   templateUrl: './disk.component.html',
 })
-export class DiskComponent implements OnDestroy {
-  private alive = true;
+export class DiskComponent implements OnDestroy, OnInit {
   diskModel: DiskModel = new DiskModel();
   isCharge: boolean = true;
   metrics = [
@@ -31,6 +25,25 @@ export class DiskComponent implements OnDestroy {
   value = 30;
   option: any = {};
   themeSubscription: any;
+
+  constructor(
+    private theme: NbThemeService,
+    private agentsService: AgentsService,
+    private activeRoute: ActivatedRoute,
+    private toastrService: NbToastrService,
+  ) {
+    // this.getAll();
+  }
+
+  set chartValue(value: number) {
+    this.value = value;
+
+    if (this.option.series) {
+      this.option.series[0].data[0].value = value;
+      this.option.series[0].data[1].value = 100 - value;
+      this.option.series[1].data[0].value = value;
+    }
+  }
 
   actualizar() {
     this.getAll();
@@ -70,25 +83,6 @@ export class DiskComponent implements OnDestroy {
       this.value = this.diskModel.disk_percent;
       this.chargeDiskChart();
     }
-  }
-
-  set chartValue(value: number) {
-    this.value = value;
-
-    if (this.option.series) {
-      this.option.series[0].data[0].value = value;
-      this.option.series[0].data[1].value = 100 - value;
-      this.option.series[1].data[0].value = value;
-    }
-  }
-
-  constructor(
-    private theme: NbThemeService,
-    private agentsService: AgentsService,
-    private activeRoute: ActivatedRoute,
-    private toastrService: NbToastrService,
-  ) {
-    // this.getAll();
   }
 
   chargeDiskChart() {
@@ -235,7 +229,6 @@ export class DiskComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.alive = false;
     this.themeSubscription ? this.themeSubscription.unsubscribe() : null;
   }
 

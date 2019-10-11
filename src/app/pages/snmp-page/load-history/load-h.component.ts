@@ -1,34 +1,35 @@
-import { ActivatedRoute } from '@angular/router';
-import { AgentsService } from '../../../agents.service';
-import { Component, OnDestroy } from '@angular/core';
-import { CPUModel } from '../../../models/cpu';
-import { delay } from 'rxjs/operators';
-import { forkJoin } from 'rxjs';
-import {
-  NbThemeService,
-  NbComponentStatus,
-  NbGlobalPhysicalPosition,
-  NbToastrService,
-} from '@nebular/theme';
+import {ActivatedRoute} from '@angular/router';
+import {AgentsService} from '../../../agents.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {NbComponentStatus, NbGlobalPhysicalPosition, NbThemeService, NbToastrService} from '@nebular/theme';
 
 @Component({
   selector: 'ngx-load-h',
   styleUrls: ['./load-h.component.scss'],
   templateUrl: './load-h.component.html',
 })
-export class LoadHComponent implements OnDestroy {
+export class LoadHComponent implements OnDestroy, OnInit {
   charName = 'load';
   themeSubscription: any;
   options: any;
   optionsChar = [
-    { value: '1', label: '5 minutos', checked: true },
-    { value: '2', label: '15 minutos' },
-    { value: '3', label: '1 hora' },
-    { value: '4', label: '5 hora' },
-    { value: '5', label: '1 dia' },
+    {value: '1', label: '5 minutos', checked: true},
+    {value: '2', label: '15 minutos'},
+    {value: '3', label: '1 hora'},
+    {value: '4', label: '5 hora'},
+    {value: '5', label: '1 dia'},
   ];
 
   isCharge: boolean;
+
+  constructor(
+    private theme: NbThemeService,
+    private agentsService: AgentsService,
+    private activeRoute: ActivatedRoute,
+    private toastrService: NbToastrService,
+  ) {
+    // this.getAll();
+  }
 
   actualizar() {
     // this.getAll();
@@ -42,16 +43,8 @@ export class LoadHComponent implements OnDestroy {
     // Object.assign(this.cpuModel, response.data);
   }
 
-  constructor(
-    private theme: NbThemeService,
-    private agentsService: AgentsService,
-    private activeRoute: ActivatedRoute,
-    private toastrService: NbToastrService,
-  ) {
-    // this.getAll();
+  ngOnDestroy() {
   }
-
-  ngOnDestroy() {}
 
   ngOnInit() {
     this.activeRoute.params.subscribe(routeParams => {
@@ -71,15 +64,15 @@ export class LoadHComponent implements OnDestroy {
       res => {
         console.log(res);
         if (res.data) {
-          const data = new Array();
-          const time = new Array();
+          const data = [];
+          const tiempo = [];
           res.data.load.forEach(metric => {
             data.push(metric.load);
-            time.push(metric.date);
+            tiempo.push(metric.date);
           });
           console.log(data);
-          console.log(time);
-          this.showDiskChart(data, time);
+          console.log(tiempo);
+          this.showDiskChart(data, tiempo);
         } else {
           this.makeToast('No hay datos');
         }
@@ -172,7 +165,7 @@ export class LoadHComponent implements OnDestroy {
             name: 'Carga',
             type: 'line',
             stack: 'Total amount',
-            areaStyle: { normal: { opacity: echarts.areaOpacity } },
+            areaStyle: {normal: {opacity: echarts.areaOpacity}},
             data: data,
           },
         ],

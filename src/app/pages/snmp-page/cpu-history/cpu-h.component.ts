@@ -1,15 +1,7 @@
 import {ActivatedRoute} from '@angular/router';
 import {AgentsService} from '../../../agents.service';
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {CPUModel} from '../../../models/cpu';
-import {delay} from 'rxjs/operators';
-import {forkJoin} from 'rxjs';
-import {
-  NbThemeService,
-  NbComponentStatus,
-  NbGlobalPhysicalPosition,
-  NbToastrService,
-} from '@nebular/theme';
+import {NbComponentStatus, NbGlobalPhysicalPosition, NbThemeService, NbToastrService} from '@nebular/theme';
 
 @Component({
   selector: 'ngx-cpu-h',
@@ -30,6 +22,15 @@ export class CPUHComponent implements OnDestroy, OnInit {
 
   isCharge: boolean;
 
+  constructor(
+    private theme: NbThemeService,
+    private agentsService: AgentsService,
+    private activeRoute: ActivatedRoute,
+    private toastrService: NbToastrService,
+  ) {
+    // this.getAll();
+  }
+
   actualizar() {
     // this.getAll();
   }
@@ -40,15 +41,6 @@ export class CPUHComponent implements OnDestroy, OnInit {
 
   parseResponse(response) {
     // Object.assign(this.cpuModel, response.data);
-  }
-
-  constructor(
-    private theme: NbThemeService,
-    private agentsService: AgentsService,
-    private activeRoute: ActivatedRoute,
-    private toastrService: NbToastrService,
-  ) {
-    // this.getAll();
   }
 
   ngOnDestroy() {
@@ -73,13 +65,13 @@ export class CPUHComponent implements OnDestroy, OnInit {
         console.log(res);
         if (res.data) {
           const data = [];
-          const time = [];
+          const tiempo = [];
           res.data.percent_cpu.forEach(metric => {
             data.push(metric.percentage_cpu);
-            time.push(metric.date);
+            tiempo.push(metric.date);
           });
           console.log(data);
-          this.showDiskChart(data, time);
+          this.showDiskChart(data, tiempo);
         } else {
           this.makeToast('No hay datos');
         }

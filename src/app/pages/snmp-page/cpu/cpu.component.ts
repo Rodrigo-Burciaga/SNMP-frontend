@@ -1,22 +1,16 @@
-import { ActivatedRoute } from '@angular/router'
-import { AgentsService } from '../../../agents.service'
-import { Component, OnDestroy } from '@angular/core'
-import { CPUModel } from '../../../models/cpu'
-import { delay } from 'rxjs/operators'
-import { forkJoin } from 'rxjs'
-import {
-  NbThemeService,
-  NbComponentStatus,
-  NbGlobalPhysicalPosition,
-  NbToastrService,
-} from '@nebular/theme';
+import {ActivatedRoute} from '@angular/router';
+import {AgentsService} from '../../../agents.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {CPUModel} from '../../../models/cpu';
+import {forkJoin} from 'rxjs';
+import {NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService} from '@nebular/theme';
 
 @Component({
   selector: 'ngx-cpu',
   styleUrls: ['./cpu.component.scss'],
   templateUrl: './cpu.component.html',
 })
-export class CPUComponent implements OnDestroy {
+export class CPUComponent implements OnDestroy, OnInit {
   cpuModel: CPUModel = new CPUModel();
   isCharge: boolean;
   metrics = [
@@ -25,6 +19,14 @@ export class CPUComponent implements OnDestroy {
     '.1.3.6.1.4.1.2021.11.52.0',
     '.1.3.6.1.4.1.2021.11.51.0',
   ];
+
+  constructor(
+    private agentsService: AgentsService,
+    private activeRoute: ActivatedRoute,
+    private toastrService: NbToastrService,
+  ) {
+    // this.getAll();
+  }
 
   actualizar() {
     this.getAll();
@@ -54,16 +56,8 @@ export class CPUComponent implements OnDestroy {
     Object.assign(this.cpuModel, response.data);
   }
 
-  constructor(
-    private theme: NbThemeService,
-    private agentsService: AgentsService,
-    private activeRoute: ActivatedRoute,
-    private toastrService: NbToastrService,
-  ) {
-    // this.getAll();
+  ngOnDestroy() {
   }
-
-  ngOnDestroy() {}
 
   ngOnInit() {
     this.activeRoute.params.subscribe(routeParams => {

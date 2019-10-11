@@ -3,7 +3,7 @@ import {AgentsService} from '../../../agents.service';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {forkJoin} from 'rxjs';
 import {LoadModel} from '../../../models/load';
-import {NbComponentStatus, NbGlobalPhysicalPosition, NbThemeService, NbToastrService} from '@nebular/theme';
+import {NbComponentStatus, NbGlobalPhysicalPosition, NbToastrService} from '@nebular/theme';
 
 @Component({
   selector: 'ngx-load',
@@ -20,7 +20,6 @@ export class LoadComponent implements OnDestroy, OnInit {
   ];
 
   constructor(
-    private theme: NbThemeService,
     private agentsService: AgentsService,
     private activeRoute: ActivatedRoute,
     private toastrService: NbToastrService,

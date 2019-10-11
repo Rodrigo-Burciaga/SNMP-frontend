@@ -1,7 +1,7 @@
 import {Agent} from '../models/agent';
 import {Component} from '@angular/core';
 import {MENU_ITEMS} from './pages-menu';
-import {NbDialogService, NbMenuService} from '@nebular/theme';
+import {NbMenuService} from '@nebular/theme';
 
 @Component({
   selector: 'ngx-pages',
@@ -19,13 +19,11 @@ export class PagesComponent {
 
   constructor(
     menu: NbMenuService,
-    private menuService: NbMenuService,
-    private dialogService: NbDialogService,
-  ) {
+    private menuService: NbMenuService) {
     menu.onItemClick().subscribe(item => {
       console.log(item);
     });
-    const menuAgentes: any[] = new Array();
+    const menuAgentes: any[] = [];
     console.log(localStorage.getItem('agentes_snmp'));
     if (localStorage.getItem('agentes_snmp')) {
       this.agentes = JSON.parse(localStorage.getItem('agentes_snmp'));

@@ -1,17 +1,9 @@
-import { ActivatedRoute } from '@angular/router'
-import { AgentsService } from '../../../agents.service'
-import { Component, OnDestroy } from '@angular/core'
-import { CPUModel } from '../../../models/cpu'
-import { delay } from 'rxjs/operators'
-import { forkJoin } from 'rxjs'
-import {
-  NbThemeService,
-  NbComponentStatus,
-  NbGlobalPhysicalPosition,
-  NbToastrService,
-} from '@nebular/theme';
+import {ActivatedRoute} from '@angular/router';
+import {AgentsService} from '../../../agents.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {NbComponentStatus, NbGlobalPhysicalPosition, NbThemeService, NbToastrService} from '@nebular/theme';
 
-interface response {
+interface Response {
   data: any;
 }
 
@@ -20,31 +12,19 @@ interface response {
   styleUrls: ['./disk-h.component.scss'],
   templateUrl: './disk-h.component.html',
 })
-export class DiskHComponent implements OnDestroy {
+export class DiskHComponent implements OnDestroy, OnInit {
   charName = 'disk';
   themeSubscription: any;
   options: any;
   optionsChar = [
-    { value: '1', label: '5 minutos', checked: true },
-    { value: '2', label: '15 minutos' },
-    { value: '3', label: '1 hora' },
-    { value: '4', label: '5 hora' },
-    { value: '5', label: '1 dia' },
+    {value: '1', label: '5 minutos', checked: true},
+    {value: '2', label: '15 minutos'},
+    {value: '3', label: '1 hora'},
+    {value: '4', label: '5 hora'},
+    {value: '5', label: '1 dia'},
   ];
 
   isCharge: boolean;
-
-  actualizar() {
-    // this.getAll();
-  }
-
-  getAll() {
-    this.updateCharDisk(1);
-  }
-
-  parseResponse(response) {
-    // Object.assign(this.cpuModel, response.data);
-  }
 
   constructor(
     private theme: NbThemeService,
@@ -55,7 +35,20 @@ export class DiskHComponent implements OnDestroy {
     // this.getAll();
   }
 
-  ngOnDestroy() {}
+  actualizar() {
+    // this.getAll();
+  }
+
+  getAll() {
+    this.updateCharDisk(1);
+  }
+
+  parseResponse(response) {
+    // Object.assign(this.cpuModel, Response.data);
+  }
+
+  ngOnDestroy() {
+  }
 
   ngOnInit() {
     this.activeRoute.params.subscribe(routeParams => {
@@ -75,15 +68,15 @@ export class DiskHComponent implements OnDestroy {
       res => {
         console.log(res);
         if (res.data) {
-          const data = new Array();
-          const time = new Array();
+          const data = [];
+          const tiempo = [];
           res.data.disk.forEach(metric => {
             data.push(metric.avail_disk / 1000000);
-            time.push(metric.date);
+            tiempo.push(metric.date);
           });
           console.log(data);
-          console.log(time);
-          this.showDiskChart(data, time);
+          console.log(tiempo);
+          this.showDiskChart(data, tiempo);
         } else {
           this.makeToast('No hay datos');
         }
@@ -176,7 +169,7 @@ export class DiskHComponent implements OnDestroy {
             name: 'Espacio en Disco',
             type: 'line',
             stack: 'Total amount',
-            areaStyle: { normal: { opacity: echarts.areaOpacity } },
+            areaStyle: {normal: {opacity: echarts.areaOpacity}},
             data: data,
           },
         ],

@@ -1,5 +1,5 @@
 import {Agent} from './models/agent';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 
@@ -28,7 +28,6 @@ export class AgentsService {
     this.agentes = JSON.parse(localStorage.getItem('agentes_snmp'));
     this.agent = this.agentes.find(a => a.id_agent === this.id_agent);
 
-    const headers = new HttpHeaders().set('Content-Type', 'text/html');
     const formData: FormData = new FormData();
     formData.append('ip', this.agent.ip);
     formData.append('community_string', 'public');
@@ -39,7 +38,6 @@ export class AgentsService {
   }
 
   addAgent(ag: Agent): Observable<any> {
-    const headers = new HttpHeaders().set('Content-Type', 'text/html');
     const formData: FormData = new FormData();
     formData.append('name', ag.name);
     formData.append('port', ag.port);
@@ -57,7 +55,6 @@ export class AgentsService {
     this.agentes = JSON.parse(localStorage.getItem('agentes_snmp'));
     this.agent = this.agentes.find(a => a.id_agent === this.id_agent);
 
-    const headers = new HttpHeaders().set('Content-Type', 'text/html');
     const formData: FormData = new FormData();
     formData.append('id_agent', this.agent.id_agent.toString());
     // formData.append('port', this.agent.port);
@@ -71,7 +68,6 @@ export class AgentsService {
 
   getProcessesHistory(time: string) {
     this.id_agent = localStorage.getItem('snmp_agent_id');
-    const headers = new HttpHeaders().set('Content-Type', 'text/html');
     const formData: FormData = new FormData();
     formData.append('id_agent', this.agent.id_agent.toString());
     return this.http.post<Resp>(`${this.uri}/get_processes/${time}`, formData);
@@ -79,7 +75,6 @@ export class AgentsService {
 
   getRamHistory(time: string) {
     this.id_agent = localStorage.getItem('snmp_agent_id');
-    const headers = new HttpHeaders().set('Content-Type', 'text/html');
     const formData: FormData = new FormData();
     formData.append('id_agent', this.agent.id_agent.toString());
     return this.http.post<Resp>(`${this.uri}/get_ram/${time}`, formData);
@@ -87,7 +82,6 @@ export class AgentsService {
 
   getDiskHistory(time: string) {
     this.id_agent = localStorage.getItem('snmp_agent_id');
-    const headers = new HttpHeaders().set('Content-Type', 'text/html');
     const formData: FormData = new FormData();
     formData.append('id_agent', this.agent.id_agent.toString());
     return this.http.post<Resp>(`${this.uri}/get_disk/${time}`, formData);
@@ -95,7 +89,6 @@ export class AgentsService {
 
   getMemoryHistory(time: string) {
     this.id_agent = localStorage.getItem('snmp_agent_id');
-    const headers = new HttpHeaders().set('Content-Type', 'text/html');
     const formData: FormData = new FormData();
     formData.append('id_agent', this.agent.id_agent.toString());
     return this.http.post<Resp>(`${this.uri}/get_memory/${time}`, formData);
@@ -103,7 +96,6 @@ export class AgentsService {
 
   getLoadHistory(time: string) {
     this.id_agent = localStorage.getItem('snmp_agent_id');
-    const headers = new HttpHeaders().set('Content-Type', 'text/html');
     const formData: FormData = new FormData();
     formData.append('id_agent', this.agent.id_agent.toString());
     return this.http.post<Resp>(`${this.uri}/get_load/${time}`, formData);
@@ -111,7 +103,6 @@ export class AgentsService {
 
   getCPUHistory(time: string) {
     this.id_agent = localStorage.getItem('snmp_agent_id');
-    const headers = new HttpHeaders().set('Content-Type', 'text/html');
     const formData: FormData = new FormData();
     formData.append('id_agent', this.agent.id_agent.toString());
     return this.http.post<Resp>(`${this.uri}/get_cpu/${time}`, formData);

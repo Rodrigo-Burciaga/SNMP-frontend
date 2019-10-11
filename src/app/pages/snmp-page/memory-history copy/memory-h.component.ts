@@ -1,36 +1,37 @@
-import { ActivatedRoute } from '@angular/router';
-import { AgentsService } from '../../../agents.service';
-import { Component, OnDestroy } from '@angular/core';
-import { CPUModel } from '../../../models/cpu';
-import { delay } from 'rxjs/operators';
-import { forkJoin } from 'rxjs';
-import {
-  NbThemeService,
-  NbComponentStatus,
-  NbGlobalPhysicalPosition,
-  NbToastrService,
-} from '@nebular/theme';
+import {ActivatedRoute} from '@angular/router';
+import {AgentsService} from '../../../agents.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {NbComponentStatus, NbGlobalPhysicalPosition, NbThemeService, NbToastrService} from '@nebular/theme';
 
 @Component({
   selector: 'ngx-memory-h',
   styleUrls: ['./memory-h.component.scss'],
   templateUrl: './memory-h.component.html',
 })
-export class MemoryHComponent implements OnDestroy {
+export class MemoryHComponent implements OnDestroy, OnInit {
   charName = 'memory';
   charNameSwap = 'memory_swap';
   themeSubscription: any;
   options: any;
   optionsSwap: any;
   optionsChar = [
-    { value: '1', label: '5 minutos', checked: true },
-    { value: '2', label: '15 minutos' },
-    { value: '3', label: '1 hora' },
-    { value: '4', label: '5 hora' },
-    { value: '5', label: '1 dia' },
+    {value: '1', label: '5 minutos', checked: true},
+    {value: '2', label: '15 minutos'},
+    {value: '3', label: '1 hora'},
+    {value: '4', label: '5 hora'},
+    {value: '5', label: '1 dia'},
   ];
 
   isCharge: boolean;
+
+  constructor(
+    private theme: NbThemeService,
+    private agentsService: AgentsService,
+    private activeRoute: ActivatedRoute,
+    private toastrService: NbToastrService,
+  ) {
+    // this.getAll();
+  }
 
   actualizar() {
     // this.getAll();
@@ -44,16 +45,8 @@ export class MemoryHComponent implements OnDestroy {
     // Object.assign(this.cpuModel, response.data);
   }
 
-  constructor(
-    private theme: NbThemeService,
-    private agentsService: AgentsService,
-    private activeRoute: ActivatedRoute,
-    private toastrService: NbToastrService,
-  ) {
-    // this.getAll();
+  ngOnDestroy() {
   }
-
-  ngOnDestroy() {}
 
   ngOnInit() {
     this.activeRoute.params.subscribe(routeParams => {
@@ -73,19 +66,19 @@ export class MemoryHComponent implements OnDestroy {
       res => {
         console.log(res);
         if (res.data) {
-          const data = new Array();
-          const data2 = new Array();
-          const time = new Array();
+          const data = [];
+          const data2 = [];
+          const tiempo = [];
           res.data.memory.forEach(metric => {
             data.push(metric.avail_ram / 1000000);
             data2.push(metric.avail_swap / 1000000);
-            time.push(metric.date);
+            tiempo.push(metric.date);
           });
           console.log(data);
           console.log(data2);
-          console.log(time);
-          this.showMemoryChart(data, time);
-          this.showMemoryChartSwap(data2, time)
+          console.log(tiempo);
+          this.showMemoryChart(data, tiempo);
+          this.showMemoryChartSwap(data2, tiempo);
         } else {
           this.makeToast('No hay datos');
         }
@@ -179,7 +172,7 @@ export class MemoryHComponent implements OnDestroy {
             type: 'line',
             stack: 'Total amount',
             color: colors.infoLight,
-            areaStyle: { normal: { opacity: echarts.areaOpacity } },
+            areaStyle: {normal: {opacity: echarts.areaOpacity}},
             data: data,
           },
         ],
@@ -187,7 +180,7 @@ export class MemoryHComponent implements OnDestroy {
     });
   }
 
-   showMemoryChartSwap(data, time) {
+  showMemoryChartSwap(data, time) {
     this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
       const colors: any = config.variables;
       const echarts: any = config.variables.echarts;
@@ -268,7 +261,7 @@ export class MemoryHComponent implements OnDestroy {
             type: 'line',
             stack: 'Total amount',
             color: colors.infoLight,
-            areaStyle: { normal: { opacity: echarts.areaOpacity } },
+            areaStyle: {normal: {opacity: echarts.areaOpacity}},
             data: data,
           },
         ],

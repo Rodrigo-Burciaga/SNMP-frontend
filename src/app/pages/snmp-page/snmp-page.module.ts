@@ -1,18 +1,18 @@
-import { CommonModule } from '@angular/common'
-import { CPUComponent } from './cpu/cpu.component'
-import { DiskComponent } from './disk/disk.component'
-import { DiskHComponent } from './disk-history/disk-h.component'
-import { FormsModule } from '@angular/forms'
-import { HistoryComponent } from './history/history.component'
-import { LoadComponent } from './load/load.component'
-import { LoadHComponent } from './load-history/load-h.component'
-import { MemoryComponent } from './memoria/memoria.component'
-import { NgModule } from '@angular/core'
-import { NgxEchartsModule } from 'ngx-echarts'
-import { RamHComponent } from './ram-history/ram-h.component'
-import { SnmpPageComponent } from './snmp-page.component'
-import { SystemComponent } from './system/system.component'
-import { ThemeModule } from '../../@theme/theme.module'
+import { CommonModule } from '@angular/common';
+import { CPUComponent } from './cpu/cpu.component';
+import { DiskComponent } from './disk/disk.component';
+import { DiskHComponent } from './disk-history/disk-h.component';
+import { FormsModule } from '@angular/forms';
+import { HistoryComponent } from './history/history.component';
+import { LoadComponent } from './load/load.component';
+import { LoadHComponent } from './load-history/load-h.component';
+import { MemoryComponent } from './memoria/memoria.component';
+import { NgModule } from '@angular/core';
+import { NgxEchartsModule } from 'ngx-echarts';
+import { RamHComponent } from './ram-history/ram-h.component';
+import { SnmpPageComponent } from './snmp-page.component';
+import { SystemComponent } from './system/system.component';
+import { ThemeModule } from '../../@theme/theme.module';
 import {
   NbCardModule,
   NbUserModule,
@@ -27,7 +27,7 @@ import {
   NbSpinnerModule,
 } from '@nebular/theme';
 import { MemoryHComponent } from './memory-history copy/memory-h.component';
-import { CPUHComponent } from './cpu-history/cpu-h.component'
+import { CPUHComponent } from './cpu-history/cpu-h.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +42,7 @@ import { CPUHComponent } from './cpu-history/cpu-h.component'
     RamHComponent,
     MemoryHComponent,
     LoadHComponent,
-    CPUHComponent
+    CPUHComponent,
   ],
   imports: [
     NbInputModule,

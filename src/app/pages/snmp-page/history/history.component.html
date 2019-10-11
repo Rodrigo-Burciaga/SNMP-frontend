@@ -12,12 +12,12 @@
       <br>
       <br>
       <br>
-      <nb-radio-group [name]="charName" >
+      <nb-radio-group [name]="charName">
         <nb-radio *ngFor="let option of optionsChar"
-                [checked]="option.checked"
-                [disabled]="option.disabled"
-                (valueChange)="updateCharProcesses($event)"
-                [value]="option.value">
+                  [checked]="option.checked"
+                  [disabled]="option.disabled"
+                  (valueChange)="updateCharProcesses($event)"
+                  [value]="option.value">
           {{ option.label }}
         </nb-radio>
       </nb-radio-group>
