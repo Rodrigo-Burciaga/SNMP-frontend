@@ -1,22 +1,16 @@
-import { ActivatedRoute } from '@angular/router'
-import { AgentsService } from '../../../agents.service'
-import { Component, OnDestroy } from '@angular/core'
-import { delay } from 'rxjs/operators'
-import { forkJoin } from 'rxjs'
-import { LoadModel } from './../../../models/load'
-import {
-  NbThemeService,
-  NbComponentStatus,
-  NbGlobalPhysicalPosition,
-  NbToastrService,
-} from '@nebular/theme';
+import {ActivatedRoute} from '@angular/router';
+import {AgentsService} from '../../../agents.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {forkJoin} from 'rxjs';
+import {LoadModel} from '../../../models/load';
+import {NbComponentStatus, NbGlobalPhysicalPosition, NbThemeService, NbToastrService} from '@nebular/theme';
 
 @Component({
   selector: 'ngx-load',
   styleUrls: ['./load.component.scss'],
   templateUrl: './load.component.html',
 })
-export class LoadComponent implements OnDestroy {
+export class LoadComponent implements OnDestroy, OnInit {
   loadModel: LoadModel = new LoadModel();
   isCharge: boolean = true;
   metrics = [
@@ -24,6 +18,15 @@ export class LoadComponent implements OnDestroy {
     '.1.3.6.1.4.1.2021.10.1.3.2',
     '.1.3.6.1.4.1.2021.10.1.3.3',
   ];
+
+  constructor(
+    private theme: NbThemeService,
+    private agentsService: AgentsService,
+    private activeRoute: ActivatedRoute,
+    private toastrService: NbToastrService,
+  ) {
+    // this.getAll();
+  }
 
   actualizar() {
     this.getAll();
@@ -54,15 +57,6 @@ export class LoadComponent implements OnDestroy {
     console.log(this.loadModel);
   }
 
-  constructor(
-    private theme: NbThemeService,
-    private agentsService: AgentsService,
-    private activeRoute: ActivatedRoute,
-    private toastrService: NbToastrService,
-  ) {
-    // this.getAll();
-  }
-
   ngOnInit() {
     this.activeRoute.params.subscribe(routeParams => {
       console.log('update');
@@ -71,7 +65,8 @@ export class LoadComponent implements OnDestroy {
     });
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() {
+  }
 
   makeToast() {
     this.showToast('danger', 'Error', 'No se pudo obtener los datos de carga');

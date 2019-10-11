@@ -1,45 +1,27 @@
-import { ActivatedRoute } from '@angular/router'
-import { AgentsService } from '../../../agents.service'
-import { Component, OnDestroy } from '@angular/core'
-import { CPUModel } from '../../../models/cpu'
-import { delay } from 'rxjs/operators'
-import { forkJoin } from 'rxjs'
-import {
-  NbThemeService,
-  NbComponentStatus,
-  NbGlobalPhysicalPosition,
-  NbToastrService,
-} from '@nebular/theme';
+import {ActivatedRoute} from '@angular/router';
+import {AgentsService} from '../../../agents.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {NbComponentStatus, NbGlobalPhysicalPosition, NbThemeService, NbToastrService} from '@nebular/theme';
 
 @Component({
   selector: 'ngx-ram-h',
   styleUrls: ['./ram-h.component.scss'],
   templateUrl: './ram-h.component.html',
 })
-export class RamHComponent implements OnDestroy {
+export class RamHComponent implements OnDestroy, OnInit {
   charName = 'ram';
   themeSubscription: any;
+  optionsRam: any;
   options: any;
   optionsChar = [
-    { value: '1', label: '5 minutos', checked: true },
-    { value: '2', label: '15 minutos' },
-    { value: '3', label: '1 hora' },
-    { value: '4', label: '5 hora' },
-    { value: '5', label: '1 dia' },
-    ,
+    {value: '1', label: '5 minutos', checked: true},
+    {value: '2', label: '15 minutos'},
+    {value: '3', label: '1 hora'},
+    {value: '4', label: '5 hora'},
+    {value: '5', label: '1 dia'},
   ];
 
   isCharge: boolean;
-
-  actualizar() {
-    // this.getAll();
-  }
-
-  getAll() {}
-
-  parseResponse(response) {
-    // Object.assign(this.cpuModel, response.data);
-  }
 
   constructor(
     private theme: NbThemeService,
@@ -50,7 +32,19 @@ export class RamHComponent implements OnDestroy {
     // this.getAll();
   }
 
-  ngOnDestroy() {}
+  actualizar() {
+    // this.getAll();
+  }
+
+  getAll() {
+  }
+
+  parseResponse(response) {
+    // Object.assign(this.cpuModel, response.data);
+  }
+
+  ngOnDestroy() {
+  }
 
   ngOnInit() {
     this.activeRoute.params.subscribe(routeParams => {
@@ -166,7 +160,7 @@ export class RamHComponent implements OnDestroy {
             name: 'Mail marketing',
             type: 'line',
             stack: 'Total amount',
-            areaStyle: { normal: { opacity: echarts.areaOpacity } },
+            areaStyle: {normal: {opacity: echarts.areaOpacity}},
             data: data,
           },
         ],

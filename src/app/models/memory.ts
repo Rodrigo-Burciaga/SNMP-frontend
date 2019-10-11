@@ -1,9 +1,10 @@
 export class MemoryModel {
-  avail_real?: number; //a
-  avail_swap?: number; //a
-  shared?: number; //
-  total_buffer?: number; //a
-  total_free?: number; // a
-  total_real?: number; //a
-  total_swap?: number; // a
+  avail_real?: number;
+  avail_swap?: number;
+  shared?: number;
+  total_buffer?: number;
+  total_free?: number;
+  total_real?: number;
+  total_swap?: number;
+  cached?: number;
 }

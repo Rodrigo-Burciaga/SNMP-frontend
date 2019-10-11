@@ -1,21 +1,22 @@
-import { Agent } from '../models/agent'
-import { Component, TemplateRef } from '@angular/core'
-import { MENU_ITEMS } from './pages-menu'
-import { NbDialogService } from '@nebular/theme'
-import { NbMenuService } from '@nebular/theme'
+import {Agent} from '../models/agent';
+import {Component} from '@angular/core';
+import {MENU_ITEMS} from './pages-menu';
+import {NbDialogService, NbMenuService} from '@nebular/theme';
+
 @Component({
   selector: 'ngx-pages',
   styleUrls: ['pages.component.scss'],
   template: `
-    <ngx-one-column-layout>
-      <nb-menu [items]="menu" tag="menu"></nb-menu>
-      <router-outlet></router-outlet>
-    </ngx-one-column-layout>
+      <ngx-one-column-layout>
+          <nb-menu [items]="menu" tag="menu"></nb-menu>
+          <router-outlet></router-outlet>
+      </ngx-one-column-layout>
   `,
 })
 export class PagesComponent {
   menu = MENU_ITEMS;
   agentes: Agent[];
+
   constructor(
     menu: NbMenuService,
     private menuService: NbMenuService,
@@ -25,6 +26,7 @@ export class PagesComponent {
       console.log(item);
     });
     const menuAgentes: any[] = new Array();
+    console.log(localStorage.getItem('agentes_snmp'));
     if (localStorage.getItem('agentes_snmp')) {
       this.agentes = JSON.parse(localStorage.getItem('agentes_snmp'));
       this.agentes.forEach(agent => {

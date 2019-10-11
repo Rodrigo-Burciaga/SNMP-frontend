@@ -1,23 +1,16 @@
-import { ActivatedRoute } from '@angular/router'
-import { AgentsService } from '../../../agents.service'
-import { Component, OnDestroy } from '@angular/core'
-import { delay } from 'rxjs/operators'
-import { DiskModel } from './../../../models/disk'
-import { forkJoin } from 'rxjs'
-import { MemoryModel } from './../../../models/memory'
-import {
-  NbThemeService,
-  NbToastrService,
-  NbComponentStatus,
-  NbGlobalPhysicalPosition,
-} from '@nebular/theme';
+import {ActivatedRoute} from '@angular/router';
+import {AgentsService} from '../../../agents.service';
+import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
+import {forkJoin} from 'rxjs';
+import {MemoryModel} from '../../../models/memory';
+import {NbComponentStatus, NbGlobalPhysicalPosition, NbThemeService, NbToastrService} from '@nebular/theme';
 
 @Component({
   selector: 'ngx-memory',
   styleUrls: ['./memoria.component.scss'],
   templateUrl: './memoria.component.html',
 })
-export class MemoryComponent implements OnDestroy {
+export class MemoryComponent implements OnDestroy, AfterViewInit, OnInit {
   optionsSwap: any = {};
   optionsReal: any = {};
   themeSubscription: any;
@@ -39,7 +32,7 @@ export class MemoryComponent implements OnDestroy {
       value: 20,
       name: 'Usada',
     },
-    { value: 32, name: 'Disponible' },
+    {value: 32, name: 'Disponible'},
   ];
 
   constructor(
@@ -90,7 +83,8 @@ export class MemoryComponent implements OnDestroy {
     this.echartsIntance = ec;
   }
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() {
+  }
 
   chargeSwapChart() {
     this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
@@ -200,7 +194,7 @@ export class MemoryComponent implements OnDestroy {
                   this.memoryModel.total_real - this.memoryModel.avail_real,
                 name: 'Usada',
               },
-              { value: this.memoryModel.avail_real, name: 'Disponible' },
+              {value: this.memoryModel.avail_real, name: 'Disponible'},
             ],
             itemStyle: {
               emphasis: {

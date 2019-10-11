@@ -1,10 +1,10 @@
 export class SystemModel {
-  system_description?: string; //a
-  system_up_time?: string; //a
-  system_contact?: string; //a
-  system_name?: string; // a
+  system_description?: string;
+  system_up_time?: string;
+  system_contact?: string;
+  system_name?: string;
   system_location?: string;
-  system_num_users?: string; // a
-  number_processes?: string; //a
-  max_processes?: string;
+  system_num_users?: string;
+  number_processes?: number;
+  max_processes?: number;
 }

@@ -1,10 +1,10 @@
-import { DashboardComponent } from './dashboard/dashboard.component'
-import { ECommerceComponent } from './e-commerce/e-commerce.component'
-import { NgModule } from '@angular/core'
-import { NotFoundComponent } from './miscellaneous/not-found/not-found.component'
-import { PagesComponent } from './pages.component'
-import { RouterModule, Routes } from '@angular/router'
-import { SnmpPageComponent } from './snmp-page/snmp-page.component'
+import {DashboardComponent} from './dashboard/dashboard.component';
+import {ECommerceComponent} from './e-commerce/e-commerce.component';
+import {NgModule} from '@angular/core';
+import {NotFoundComponent} from './miscellaneous/not-found/not-found.component';
+import {PagesComponent} from './pages.component';
+import {RouterModule, Routes} from '@angular/router';
+import {SnmpPageComponent} from './snmp-page/snmp-page.component';
 
 const routes: Routes = [
   {
@@ -101,4 +101,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class PagesRoutingModule {}
+export class PagesRoutingModule {
+}

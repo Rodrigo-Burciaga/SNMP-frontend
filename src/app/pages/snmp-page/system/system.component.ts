@@ -1,23 +1,22 @@
-import { ActivatedRoute } from '@angular/router'
-import { AgentsService } from './../../../agents.service'
-import { Component, OnDestroy } from '@angular/core'
-import { delay } from 'rxjs/operators'
-import { forkJoin } from 'rxjs'
-import { SystemModel } from './../../../models/system'
-import {
-  NbThemeService,
-  NbComponentStatus,
-  NbGlobalPhysicalPosition,
-  NbToastrService,
-} from '@nebular/theme';
+import {ActivatedRoute} from '@angular/router';
+import {AgentsService} from './../../../agents.service';
+import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
+import {delay} from 'rxjs/operators';
+import {forkJoin} from 'rxjs';
+import {SystemModel} from './../../../models/system';
+import {NbComponentStatus, NbGlobalPhysicalPosition, NbThemeService, NbToastrService} from '@nebular/theme';
 
 @Component({
   selector: 'ngx-system',
   styleUrls: ['./system.component.scss'],
   templateUrl: './system.component.html',
 })
-export class SystemComponent implements OnDestroy {
+export class SystemComponent implements OnDestroy, AfterViewInit, OnInit {
   isCharge: boolean = true;
+  systemModel: SystemModel = new SystemModel();
+  value = 70;
+  option: any = {};
+  themeSubscription: any;
   private metrics = [
     '.1.3.6.1.2.1.1.1.0',
     '.1.3.6.1.2.1.1.3.0',
@@ -30,14 +29,10 @@ export class SystemComponent implements OnDestroy {
     '.1.3.6.1.2.1.25.1.7.0',
   ];
   private toUpdate = [
-    '.1.3.6.1.2.1.1.4.0', //contacto
-    '.1.3.6.1.2.1.1.5.0', //Sysname
-    '.1.3.6.1.2.1.1.6.0', //Location
+    '.1.3.6.1.2.1.1.4.0', // contacto
+    '.1.3.6.1.2.1.1.5.0', // Sysname
+    '.1.3.6.1.2.1.1.6.0', // Location
   ];
-  systemModel: SystemModel = new SystemModel();
-  value = 70;
-  option: any = {};
-  themeSubscription: any;
 
   constructor(
     private theme: NbThemeService,
@@ -46,6 +41,16 @@ export class SystemComponent implements OnDestroy {
     private toastrService: NbToastrService,
   ) {
     // this.getAll();
+  }
+
+  set chartValue(value: number) {
+    this.value = value;
+
+    if (this.option.series) {
+      this.option.series[0].data[0].value = value;
+      this.option.series[0].data[1].value = 100 - value;
+      this.option.series[1].data[0].value = value;
+    }
   }
 
   updateSystem() {
@@ -72,16 +77,6 @@ export class SystemComponent implements OnDestroy {
       },
       () => (this.isCharge = false),
     );
-  }
-
-  set chartValue(value: number) {
-    this.value = value;
-
-    if (this.option.series) {
-      this.option.series[0].data[0].value = value;
-      this.option.series[0].data[1].value = 100 - value;
-      this.option.series[1].data[0].value = value;
-    }
   }
 
   getAll() {

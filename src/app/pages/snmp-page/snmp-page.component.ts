@@ -1,8 +1,8 @@
-import { ActivatedRoute, Router } from '@angular/router'
-import { Agent } from '../../models/agent'
-import { AgentsService } from '../../agents.service'
-import { Component, OnInit } from '@angular/core'
-import { NbMenuService } from '@nebular/theme'
+import {ActivatedRoute, Router} from '@angular/router';
+import {Agent} from '../../models/agent';
+import {AgentsService} from '../../agents.service';
+import {Component, OnInit} from '@angular/core';
+import {NbMenuService} from '@nebular/theme';
 
 interface Parametros {
   params: any;
@@ -13,17 +13,19 @@ interface Parametros {
   templateUrl: './snmp-page.component.html',
   styleUrls: ['./snmp-page.component.scss'],
 })
-export class SnmpPageComponent {
+export class SnmpPageComponent implements OnInit {
   agente: Agent = new Agent();
   isNew: boolean;
   showHistory: boolean = false;
   agentes: Agent[];
+
   constructor(
     private route: ActivatedRoute,
     private menuService: NbMenuService,
     private agentsService: AgentsService,
     private router: Router,
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
@@ -47,7 +49,7 @@ export class SnmpPageComponent {
 
     this.agentsService.addAgent(this.agente).subscribe(
       data => {
-        this.agentes = JSON.parse(localStorage.getItem('agentes_snmp'));
+        this.agentes = [] || JSON.parse(localStorage.getItem('agentes_snmp'));
         this.agente.id_agent = data.data.id;
         this.agentes.push(this.agente);
         localStorage.setItem('agentes_snmp', JSON.stringify(this.agentes));

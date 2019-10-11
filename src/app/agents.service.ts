@@ -1,7 +1,7 @@
-import { Agent } from './models/agent'
-import { HttpClient, HttpHeaders } from '@angular/common/http'
-import { Injectable } from '@angular/core'
-import { Observable } from 'rxjs'
+import {Agent} from './models/agent';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
 
 interface Resp {
   data: any;
@@ -16,7 +16,12 @@ export class AgentsService {
   agent: Agent;
   id_agent;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
+
+  findAll(): Observable<any> {
+    return this.http.post<Resp>(`${this.uri}/get_all_instances`, null);
+  }
 
   getMetric(oid: string): Observable<any> {
     this.id_agent = localStorage.getItem('snmp_agent_id');

@@ -6,9 +6,9 @@
       <nb-card-body>
         <p>IP: 120.0.0.0</p>
         <p>Tiempo Encendido: {{systemModel.system_up_time}} min</p>
-        <p>Usuarios activos: {{systemModel.system_num_users}} min</p>
-        <p>Procesos activos: {{systemModel.number_processes}} min</p>
-        <p>Limite: {{systemModel.max_processes == 0 ? 'No Tiene' : systemModel.max_processes}}</p>
+        <p>Usuarios activos: {{systemModel.system_num_users}}</p>
+        <p>Procesos activos: {{systemModel.number_processes}}</p>
+        <p>Limite Procesos: {{systemModel.max_processes == 0 ? 'No Tiene' : systemModel.max_processes}}</p>
         <p>{{systemModel.system_description}}</p>
       </nb-card-body>
     </nb-card>
@@ -22,15 +22,18 @@
         <form (ngSubmit)="updateSystem()">
           <div class="form-group">
             <label for="exampleInputEmail1" class="label">Contacto</label>
-            <input type="text" nbInput fullWidth id="exampleInputEmail1" placeholder="Contacto" [(ngModel)]="systemModel.system_contact" [ngModelOptions]="{standalone: true}">
+            <input type="text" nbInput fullWidth id="exampleInputEmail1" placeholder="Contacto"
+                   [(ngModel)]="systemModel.system_contact" [ngModelOptions]="{standalone: true}">
           </div>
           <div class="form-group">
             <label for="exampleInputPassword1" class="label">Nombre del dispositivo</label>
-            <input type="text" nbInput fullWidth id="exampleInputPassword1" placeholder="Nombre del dispostivo" [(ngModel)]="systemModel.system_name" [ngModelOptions]="{standalone: true}">
+            <input type="text" nbInput fullWidth id="exampleInputPassword1" placeholder="Nombre del dispostivo"
+                   [(ngModel)]="systemModel.system_name" [ngModelOptions]="{standalone: true}">
           </div>
           <div class="form-group">
             <label for="exampleInputPassword1" class="label">Locacion</label>
-            <input type="text" nbInput fullWidth id="exampleInputPassword1" placeholder="Locacion" [(ngModel)]="systemModel.system_location" [ngModelOptions]="{standalone: true}">
+            <input type="text" nbInput fullWidth id="exampleInputPassword1" placeholder="Locacion"
+                   [(ngModel)]="systemModel.system_location" [ngModelOptions]="{standalone: true}">
           </div>
           <button type="submit" nbButton status="danger">Actualizar</button>
         </form>
